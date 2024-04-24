@@ -21,5 +21,5 @@ class ItemMeta(ABCMeta):
             if isinstance(value, Field):
                 field[key] = value
         cls_instance = super().__new__(mcs, name, bases, attrs)
-        cls_instance.Field = field
+        cls_instance.FIELDS = field
         return cls_instance

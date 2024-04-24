@@ -1,6 +1,6 @@
 from bald_spider import Request
 from bald_spider.spider import Spider
-from items import BaiduItem
+from items import BaiduItem  # noinspection
 
 
 class BaiduSpider(Spider):
@@ -31,3 +31,4 @@ class BaiduSpider(Spider):
         item = BaiduItem()
         item['url'] = 'baidu.com'
         item['title'] = '百度首页'
+        yield item
