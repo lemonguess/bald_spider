@@ -19,3 +19,14 @@ class OutputError(Exception):
 
 class SpiderTypeError(TypeError):
     pass
+
+
+class ItemInitError(Exception):
+    pass
+
+
+class ItemAttributeError(Exception):
+    pass
+
+class DecodeError(Exception):
+    pass

@@ -1,7 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@Time    : 2024-04-26 14:12
+@Author  : lxc
+@File    : download.py
+@Desc    :
+aiohttp httpx 插件化设计：插拔型，即插即用。
+"""
 import asyncio
 import time
 import random
-import requests
 
 
 class Downloader:

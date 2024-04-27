@@ -19,7 +19,8 @@ class Request:
                  method: str = 'GET',
                  cookies: Optional[Dict] = None,
                  proxy: Optional[Dict] = None,
-                 body=''
+                 body='',
+                 encoding: str = 'utf-8'
                  ):
         self.url = url
         self.headers = headers
@@ -29,6 +30,7 @@ class Request:
         self.cookies = cookies
         self.proxy = proxy
         self.body = body
+        self.encoding = encoding
 
     def __lt__(self, other):  # less than
         return self.priority < other.priority

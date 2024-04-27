@@ -9,3 +9,6 @@
 """
 CONCURRENCY = 32
 TEST = 3333
+
+LOG_LEVEL = 'INFO'
+

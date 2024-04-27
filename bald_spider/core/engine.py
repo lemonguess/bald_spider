@@ -10,12 +10,13 @@ from bald_spider.core.downloader import Downloader
 from bald_spider.core.schedule import Schedule
 from bald_spider.utils.spider import transform
 from bald_spider.task_manager import TaskManager
-
+from bald_spider.utils.log import get_logger
 
 class Engine:
     def __init__(self, crawler):
         self.crawler = crawler
         self.settings = crawler.settings
+        self.logger = get_logger(self.__class__.__name__, log_level=self.settings.get("LOG_LEVEL"))
         self.downloader: Optional[Downloader] = None
         self.scheduler: Optional[Schedule] = None
         self.processor: Optional[Processor] = None
@@ -26,6 +27,8 @@ class Engine:
 
     async def start_spider(self, spider):
         self.running = True
+        self.logger.info(f"info bald_spider started. (project name: {self.settings.get('PROJECT_NAME')})")
+        self.logger.debug(f"debug bald_spider started. (project name: {self.settings.get('PROJECT_NAME')})")
         self.scheduler = Schedule()
         self.spider = spider
         if hasattr(self.scheduler, 'open'):
@@ -48,7 +51,7 @@ class Engine:
                 await self._crawl(request)
             else:
                 try:
-                    start_request = next(self.start_requests)  # noqa
+                    start_request = next(self.start_requests)
                 except StopIteration:
                     self.start_requests = None
                 except Exception as exc:
@@ -57,8 +60,9 @@ class Engine:
                     # 3.下载器是否空闲.
                     if not await self._exit():
                         continue
-                    else:
-                        self.running = False
+                    self.running = False
+                    if self.start_requests is not None:
+                        self.logger.error(f"Error during start_requests:{exc}")
                 else:
                     # 入队
                     await self.enqueue_request(start_request)

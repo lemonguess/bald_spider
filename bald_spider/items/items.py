@@ -10,6 +10,8 @@
 from copy import deepcopy
 from pprint import pformat
 from collections.abc import MutableMapping
+
+from bald_spider.exceptions import ItemInitError, ItemAttributeError
 from bald_spider.items import Field, ItemMeta
 
 
@@ -17,8 +19,15 @@ from bald_spider.items import Field, ItemMeta
 class Item(MutableMapping, metaclass=ItemMeta):
     FIELDS: dict
 
-    def __init__(self):
+    def __init__(self,*args,**kwargs):
+        # 不接收位置参数
         self._values = {}
+        if args:
+            raise ItemInitError(f"{self.__class__.__name__}: position args is not supported,"
+                                f" use keyword args.")
+        if kwargs:
+            for k, v in kwargs.items():
+                self[k] = v
 
     def __setitem__(self, key, value):
         if key in self.FIELDS:
@@ -38,7 +47,7 @@ class Item(MutableMapping, metaclass=ItemMeta):
         """属性拦截器"""
         field = super().__getattribute__("FIELDS")
         if item in field:
-            raise AttributeError(f"use item[{item!r}] to get field value.")
+            raise ItemAttributeError(f"use item[{item!r}] to get field value.")
         else:
             return super().__getattribute__(item)
 
@@ -73,7 +82,6 @@ if __name__ == '__main__':
         title = Field()
 
 
-    test_item = TestItem()
-    test_item['url'] = 'http://www.baidu.com'
+    test_item = TestItem('111111')
+    # test_item['url'] = 'http://www.baidu.com'
     print(test_item['url'])
-    print(test_item.xxx)
