@@ -12,7 +12,7 @@ async def run():
     settings = get_settings()
     process = CrawlerProcess(settings)
     await process.crawl(BaiduSpider)
-    await process.crawl(BaiduSpider2)
+    # await process.crawl(BaiduSpider2)
     await process.start()
 
 

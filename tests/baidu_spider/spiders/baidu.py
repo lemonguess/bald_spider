@@ -14,20 +14,23 @@ class BaiduSpider(Spider):
     # start_url = 'https://www.baidu.com'
     def parse(self, response):
         print("parse", response)
-        for i in range(10):
+        for i in range(2):
             url = "https://www.baidu.com"
             request = Request(url=url, callback=self.parse_page)
             yield request
 
     def parse_page(self, response):
         print("parse_page", response)
-        for i in range(10):
+        for i in range(3):
             url = "https://www.baidu.com"
-            request = Request(url=url, callback=self.parse_detail)
+            meta = {"test": "test"}
+            request = Request(url=url, callback=self.parse_detail,meta=meta)
             yield request
 
     def parse_detail(self, response):
-        # print('parse_detail', response)
+        print(response.text)
+        print(response.text)
+        print(response.xpath("//head").get())
         item = BaiduItem()
         item['url'] = 'baidu.com'
         item['title'] = '百度首页'

@@ -33,7 +33,9 @@ class Engine:
         self.spider = spider
         if hasattr(self.scheduler, 'open'):
             self.scheduler.open()
-        self.downloader = Downloader()
+        self.downloader = Downloader(self.crawler)
+        if hasattr(self.downloader, 'open'):
+            self.downloader.open()
         self.processor = Processor(self.crawler)
         self.start_requests = iter(spider.start_requests())  # iter函数可以接受一个可迭代对象作为参数，然后返回一个迭代器对象
         await self.open_spider()
@@ -66,6 +68,8 @@ class Engine:
                 else:
                     # 入队
                     await self.enqueue_request(start_request)
+        if not self.running:
+            await self.close_spider()
 
     async def _crawl(self, request):
         async def crawl_task():
@@ -119,3 +123,7 @@ class Engine:
         if self.scheduler.idle() and self.downloader.idle() and self.task_manager.all_done() and self.processor.idle():
             return True
         return False
+
+    async def close_spider(self):
+        # pass
+        await self.downloader.close()

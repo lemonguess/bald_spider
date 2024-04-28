@@ -9,8 +9,10 @@
 """
 PROJECT_NAME = "baidu_spider"
 
-CONCURRENCY = 32
+CONCURRENCY = 1
 
 TEST = 6666
 
 LOG_LEVEL = 'DEBUG'
+
+USE_SESSION = True
